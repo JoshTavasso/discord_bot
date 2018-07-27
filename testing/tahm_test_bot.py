@@ -4,6 +4,15 @@ from discord.ext import commands
 BOT_PREFIX = ('&')
 TOKEN = "NDcxNzkxNDgxNTMxNjYyMzM3.Djp-Dg.lpiiwhMJPo88kgUR450sCEJBJps"
 
+E = '.'
+X = 'X'
+O = 'O'
+BOARD = [
+    [E, E, E],
+    [E, E, E],
+    [E, E, E]
+    ]
+
 bot = commands.Bot(command_prefix=BOT_PREFIX)
 
 bot.remove_command('help')
@@ -41,6 +50,45 @@ async def purge(ctx):
 
     await ctx.bot.purge_from(channel, limit=1000, check=check)    
     await ctx.bot.say("Purge Complete", delete_after=10)
+
+def board_display():
+    board = f'''
+   TIC  TAC  TOE
+
+     1   2   3
+   -------------
+ 1 | {BOARD[0][0]} | {BOARD[0][1]} | {BOARD[0][2]} |
+   -------------
+ 2 | {BOARD[1][0]} | {BOARD[1][1]} | {BOARD[1][2]} |
+   -------------
+ 3 | {BOARD[2][0]} | {BOARD[2][1]} | {BOARD[2][2]} |
+   -------------
+'''
+    return "```" + board + "```"
+
+def clear():
+    for row in range(3):
+        for col in range(3):
+            BOARD[row][col] = E
+
+def place(r, c):
+    BOARD[r][c] = X
+
+@bot.command(pass_context=True)
+async def board(ctx):
+    await ctx.bot.say(board_display())
+
+@bot.command(pass_context=True)
+async def reset(ctx):
+    clear()
+    await ctx.bot.say("Board Reset!")
+
+'''
+@bot.command(pass_context=True)
+async def move(ctx):
+    
+    await ctx.bot.say(board())
+'''
 
 @bot.event
 async def on_ready():
