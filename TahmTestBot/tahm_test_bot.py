@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 BOT_PREFIX = ('&')
-TOKEN = "NDcxNzkxNDgxNTMxNjYyMzM3.Djp-Dg.lpiiwhMJPo88kgUR450sCEJBJps"
+TOKEN = "NDcxNzkxNDgxNTMxNjYyMzM3.Dj589w.JT1galpWvN67pex0iOldHdcUhps"
 
 E = '.'
 X = 'X'
