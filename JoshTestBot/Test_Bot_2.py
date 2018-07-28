@@ -3,7 +3,7 @@
 import discord
 client = discord.Client()
 
-token = 'NDcxOTYxNjU3ODgzNzU0NDk3.Djscfw.prkRhd_XrJZsM9pNVVNsIQAm7Mc'
+from config import token
 
 from youtube import generate_yt_url
 
