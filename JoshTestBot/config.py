@@ -5,11 +5,6 @@ data needed for bot
 just for organization purposes
 """
 
-"""
-for authorizing
-https://discordapp.com/api/oauth2/authorize?client_id=471961657883754497&permissions=0&scope=bot
-"""
-
 prefixes = ['!', '?', '&', '`']
 
 help_message = """
@@ -49,7 +44,7 @@ A bot we can use for testing purposes.
 
 help_page =  "```" + help_message + "```"
 
-token = 'NDcxOTYxNjU3ODgzNzU0NDk3.Djscfw.prkRhd_XrJZsM9pNVVNsIQAm7Mc'
+token = 'NDcyNjk1MTI0MjgzODgzNTQy.Dj3Hfg.QbQrajkO0cH11vG_spUvrAQ6bTk'
 
 # message life time
 life_time = 10
