@@ -1,9 +1,11 @@
-# NEEDS TO FUN SIMULTANEOUSLY WITH TEST BOT 2
-
 import discord
 from discord.ext import commands
 
+# some extra data needed for bot
 from config import prefixes, help_page, token, life_time
+
+# helper youtube function 
+from youtube import generate_yt_url
 
 # needed for putting bot in and out of voice channel
 current_voice = None
@@ -16,7 +18,40 @@ bot.remove_command('help')
 
 @bot.command(pass_context = True)
 async def play(ctx, *args):
-    pass
+    # setup
+    member = ctx.message.author
+    server = ctx.message.server
+    channel = member.voice.voice_channel
+    global current_voice
+
+    # Have the bot leave the voice channel
+    # if it is connected, to hopefully get rid 
+    # of the overlapping sound issue earlier
+    if ctx.bot.is_voice_connected(server):
+        await ctx.bot.say("Leaving Your Voice Channel")
+        for voice_client in ctx.bot.voice_clients:
+            if (voice_client.server == ctx.message.server):
+                await voice_client.disconnect()
+                break
+
+    current_voice = await ctx.bot.join_voice_channel(channel)
+    await ctx.bot.say("Now joining Your Voice Channel")
+
+    # parse arguments
+    search = ' '.join(args)
+    print(search)
+
+    if search == "": 
+        return await bot.say("you didn't specify a search")
+
+    # top URL for now
+    url = generate_yt_url(search)[0] 
+    await bot.say('...downloading the video')
+
+    # play audio
+    player = await current_voice.create_ytdl_player(url)
+    player.start()
+    await ctx.bot.say('The song is playing!')
 
 @bot.command(pass_context = True)
 async def help(ctx):
@@ -78,6 +113,11 @@ async def voice(ctx):
         current_voice = await ctx.bot.join_voice_channel(channel)
         await ctx.bot.say("Joining Your Voice Channel")
 
+# I commented this out so you can see error messages in your terminal
+# if this was not commented out, it would just go here every time
+# you get an error, making it hard to debug
+
+'''
 @bot.event
 async def on_command_error(error, ctx):
     """
@@ -86,7 +126,7 @@ async def on_command_error(error, ctx):
 
     This gives them the help page
     """
-    await bot.send_message(ctx.message.channel, "An error occured, maybe you inputted a wrong command\n{}".format(help_page))
+    await bot.send_message(ctx.message.channel, "An error occured, maybe you inputted a wrong command\n{}".format(help_page))'''
 
 @bot.event
 async def on_ready():
