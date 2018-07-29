@@ -1,3 +1,6 @@
+# THE VERSION THAT PLAYS OFF YOUTUBE RATHER THAN DIRECTLY FROM MP3
+# THIS VERSION MIGHT ACTUALLY STILL WORK BECAUSE MP3 STILL LAGS I THINK!!!! :/
+
 import discord
 from discord.ext import commands
 
@@ -5,16 +8,10 @@ from discord.ext import commands
 from config import prefixes, help_page, token, life_time
 
 # helper youtube function 
-from youtube import generate_yt_url, download_mp3
+from youtube import generate_yt_url
 
 # needed for putting bot in and out of voice channel
 current_voice = None
-
-SEARCH = None
-
-LIST = None
-
-import os 
 
 # discord command bot
 bot = commands.Bot(command_prefix='?', description = "test bot")
@@ -23,48 +20,7 @@ bot = commands.Bot(command_prefix='?', description = "test bot")
 bot.remove_command('help')
 
 @bot.command(pass_context = True)
-async def search(ctx, *args):
-
-    # parse arguments
-    global SEARCH
-    SEARCH = ' '.join(args)
-    print(SEARCH)
-
-    if search == "": return await ctx.bot.say("you didn't specify a search")
-
-    # plan is, to put all of the search results into a list
-    # and display that list in the command below
-    # then, user uses ?play "song in list" to play the song
-    return await ctx.bot.say("Thanks! Search results documented in list")
-
-
-@bot.command(pass_context = True)
-async def list(ctx):
-    '''
-    displays list of songs
-    will do this later
-    '''
-    global LIST
-    pass
-
-@bot.command(pass_context = True)
 async def play(ctx, *args):
-    '''
-    downloads song and plays it
-
-    to use later, for now, use ?play (with no args)
-    global LIST
-    song = ' '.join(args)
-    if song not in LIST: return await ctx.bot.say("that song is not in the list!")
-    '''
-    
-    directory = os.fsencode('.')
-
-    # delete mp3s currently in directory
-    for file in os.listdir(directory):
-        filename = os.fsdecode(file)
-        if filename.endswith(".mp3"):
-            os.remove(filename)
     # setup
     member = ctx.message.author
     server = ctx.message.server
@@ -84,32 +40,22 @@ async def play(ctx, *args):
     current_voice = await ctx.bot.join_voice_channel(channel)
     await ctx.bot.say("Now joining Your Voice Channel")
 
-    if SEARCH == None or SEARCH == "": 
+    # parse arguments
+    search = ' '.join(args)
+    print(search)
+
+    if search == "": 
         return await bot.say("you didn't specify a search")
 
     # top URL for now
-    url = generate_yt_url(SEARCH)[0] 
-    await bot.say('...downloading the {}'.format(SEARCH))
-    print(url)
+    url = generate_yt_url(search)[0] 
+    await bot.say('...downloading the video')
 
-    # download mp3 to directory
-    download_mp3(url)
-    
-    # get song title
-    song = ''
-    for file in os.listdir(directory):
-        filename = os.fsdecode(file)
-        if filename.endswith(".mp3"):
-            song = filename
-            break
-        else:
-            continue
-    
     # play audio
-    player = current_voice.create_ffmpeg_player(song)
-    await ctx.bot.say('{} is playing!'.format(song))
+    player = await current_voice.create_ytdl_player(url)
     player.start()
-    
+    await ctx.bot.say('The song is playing!')
+
 @bot.command(pass_context = True)
 async def help(ctx):
     await ctx.bot.say(help_page)
