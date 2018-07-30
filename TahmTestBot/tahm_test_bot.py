@@ -5,7 +5,7 @@ from discord.ext import commands
 BOT_PREFIX = '&'
 TOKEN = "NDcxNzkxNDgxNTMxNjYyMzM3.Dj589w.JT1galpWvN67pex0iOldHdcUhps"
 
-E = '.'
+E = ' '
 X = 'X'
 O = 'O'
 BOARD = [
@@ -14,6 +14,8 @@ BOARD = [
     [E, E, E]
     ]
 FIRST = X
+
+REMINDERS = {}
 
 bot = commands.Bot(command_prefix=BOT_PREFIX)
 
@@ -140,6 +142,33 @@ async def nick(ctx):
     new_nick = random.choice(nicks)
     await ctx.bot.change_nickname(author, new_nick)
     await ctx.bot.say(f"You have been knighted as {new_nick}, " + author.mention)
+
+
+def erase_list(author):
+    if author in REMINDERS.keys():
+        REMINDERS[author] = []
+
+
+@bot.command(pass_context=True)
+async def note(ctx, *args):
+    author = ctx.message.author
+    if author not in REMINDERS.keys():
+        REMINDERS[author] = []
+    REMINDERS[author].append(' '.join(args))
+    await ctx.bot.say(author.mention + f", I have noted the following: ```{' '.join(args)}```")
+
+
+@bot.command(pass_context=True)
+async def todo(ctx):
+    author = ctx.message.author
+    await ctx.bot.say(author.mention + f", your to-do list is as follows: ```{', '.join(REMINDERS[author])}```")
+
+
+@bot.command(pass_context=True)
+async def erase(ctx):
+    author = ctx.message.author
+    erase_list(author)
+    await ctx.bot.say(author.mention + ", your to-do list has been cleared!")
 
 
 @bot.event
