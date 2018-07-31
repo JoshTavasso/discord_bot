@@ -5,6 +5,7 @@ from discord.ext import commands
 BOT_PREFIX = '&'
 TOKEN = "NDcxNzkxNDgxNTMxNjYyMzM3.Dj589w.JT1galpWvN67pex0iOldHdcUhps"
 
+# Some static variables to use for TTT
 E = ' '
 X = 'X'
 O = 'O'
@@ -15,6 +16,8 @@ BOARD = [
     ]
 FIRST = X
 
+# Reminders (for now) are set in a dictionary using the author of the command as a key,
+# with a list of strings as the value
 REMINDERS = {}
 
 bot = commands.Bot(command_prefix=BOT_PREFIX)
@@ -22,8 +25,79 @@ bot = commands.Bot(command_prefix=BOT_PREFIX)
 bot.remove_command('help')
 
 
+### HELPER FUNCTIONS ###
+
+
+def board_display():
+    '''
+    Displays what the current state of the board is
+    :return: None
+    '''
+    board = f'''
+   TIC  TAC  TOE
+
+     1   2   3
+   -------------
+ 1 | {BOARD[0][0]} | {BOARD[0][1]} | {BOARD[0][2]} |
+   -------------
+ 2 | {BOARD[1][0]} | {BOARD[1][1]} | {BOARD[1][2]} |
+   -------------
+ 3 | {BOARD[2][0]} | {BOARD[2][1]} | {BOARD[2][2]} |
+   -------------
+'''
+    return "```" + board + "```"
+
+
+def clear():
+    '''
+    Clears the board and replaces all cells with 'E'
+    :return: None
+    '''
+    for row in range(3):
+        for col in range(3):
+            BOARD[row][col] = E
+
+
+def place(r, c):
+    '''
+    Places an X or an O in a given cell
+    :param r: the row number
+    :param c: the column number
+    :return: None
+    '''
+    BOARD[r][c] = FIRST
+
+
+def switch():
+    '''
+    Switches the current player from X to O, and vice versa
+    :return: None
+    '''
+    global FIRST
+    if FIRST == X:
+        FIRST = O
+    else:
+        FIRST = X
+
+
+def erase_list(author):
+    '''
+    Empties the list of reminders from a single user
+    :param author: User object, found with ctx.message.author
+    :return: None
+    '''
+    if author in REMINDERS.keys():
+        REMINDERS[author] = []
+
+
+### COMMANDS ###
+
+
 @bot.command(pass_context=True)
 async def help(ctx):
+    '''
+    Displays the help message
+    '''
     help_message = '''
 tahm test bot
 
@@ -61,12 +135,18 @@ Tom's testing bot.
 
 @bot.command(pass_context=True)
 async def hello(ctx):
+    '''
+    Bot responds with "Hello" and mentions the author
+    '''
     author = ctx.message.author
     await ctx.bot.say("Hello " + author.mention)
 
 
 @bot.command(pass_context=True)
 async def purge(ctx):
+    '''
+    Purges any commands beginning with '!', '?', or '&', empty messages, or text-formatted ones (```these```)
+    '''
     channel = ctx.message.channel
     check = lambda msg: msg.content == "" or msg.content[0] in ['!', '?', '&'] or msg.content[:3] == "```"
 
@@ -74,53 +154,28 @@ async def purge(ctx):
     await ctx.bot.say("Purge Complete", delete_after=10)
 
 
-def board_display():
-    board = f'''
-   TIC  TAC  TOE
-
-     1   2   3
-   -------------
- 1 | {BOARD[0][0]} | {BOARD[0][1]} | {BOARD[0][2]} |
-   -------------
- 2 | {BOARD[1][0]} | {BOARD[1][1]} | {BOARD[1][2]} |
-   -------------
- 3 | {BOARD[2][0]} | {BOARD[2][1]} | {BOARD[2][2]} |
-   -------------
-'''
-    return "```" + board + "```"
-
-
-def clear():
-    for row in range(3):
-        for col in range(3):
-            BOARD[row][col] = E
-
-
-def place(r, c):
-    BOARD[r][c] = FIRST
-
-
-def switch():
-    global FIRST
-    if FIRST == X:
-        FIRST = O
-    else:
-        FIRST = X
-
-
 @bot.command(pass_context=True)
 async def board(ctx):
+    '''
+    Displays the current board
+    '''
     await ctx.bot.say(board_display())
 
 
 @bot.command(pass_context=True)
 async def reset(ctx):
+    '''
+    Resets and clears the entire board
+    '''
     clear()
     await ctx.bot.say("Board Reset!")
 
 
 @bot.command(pass_context=True)
 async def move(ctx, *args):
+    '''
+    Checks if a cell is empty at a given coordinate, then if it is, inserts an X or an O
+    '''
     r = int(args[0]) - 1
     c = int(args[1]) - 1
     if BOARD[r][c] == E:
@@ -133,6 +188,10 @@ async def move(ctx, *args):
 
 @bot.command(pass_context=True)
 async def nick(ctx):
+    '''
+    STILL IN DEVELOPMENT
+    Randomly chooses among a list of nicknames and changes author's nickname to it
+    '''
     author = ctx.message.author
     nicks = [
         "Needed a New Nickname",
@@ -144,13 +203,12 @@ async def nick(ctx):
     await ctx.bot.say(f"You have been knighted as {new_nick}, " + author.mention)
 
 
-def erase_list(author):
-    if author in REMINDERS.keys():
-        REMINDERS[author] = []
-
-
 @bot.command(pass_context=True)
 async def note(ctx, *args):
+    '''
+    Checks if a user is registered in the dictionary of reminders, then makes a list for them
+    From then, the message is *args is appended to the list, and the bot responds saying the message was added
+    '''
     author = ctx.message.author
     if author not in REMINDERS.keys():
         REMINDERS[author] = []
@@ -160,12 +218,18 @@ async def note(ctx, *args):
 
 @bot.command(pass_context=True)
 async def todo(ctx):
+    '''
+    Displays the entire list of reminders the user has made note of
+    '''
     author = ctx.message.author
     await ctx.bot.say(author.mention + f", your to-do list is as follows: ```{', '.join(REMINDERS[author])}```")
 
 
 @bot.command(pass_context=True)
 async def erase(ctx):
+    '''
+    Erases the entire list of reminders
+    '''
     author = ctx.message.author
     erase_list(author)
     await ctx.bot.say(author.mention + ", your to-do list has been cleared!")
