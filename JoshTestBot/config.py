@@ -5,44 +5,48 @@ data needed for bot
 just for organization purposes
 """
 
-prefixes = ['!', '?', '&', '`']
-
-help_message = """
+_help_message = """
 
 Test Bot!
 
 A bot we can use for testing purposes.
 
-?hello ->
-    says hello
+?join ->
+    Join Voice Channel
+
+?leave ->
+    Leave Voice Channel
+
+?play "words here" ->
+    User can search for a song on 
+    youtube and this plays the first
+    video that pops up in the search
+    results
+
+    Will try to make this better later
+
+    Possibly add in a queue, and a command
+    to view all of the search results so
+    the user can choose a video!
+
+    Also, NOTE: Sometimes there is a 
+    "ConnectionRefusedError" that happens
+    when trying to play a song
+
+    I am not too sure why that happens yet.
 
 ?purge ->
     Mass Delete Messages that have key prefixes.
     For testing purposes.
-
-?voice ->
-    For joining/leaving the author's voice channel
-
-    Simply joins and leaves the voice channel, for now
-    Maybe we can use this to plays songs, potentially?
-
-    Example:
-
-    Me: ?voice
-    Bot: Joining Your Voice Channel
-
-    Me: ?voice
-    Bot: Leaving Your Voice Channel
-
-?play "words here" ->
-	Plays a youtube URL
 
 ?help ->
     This message.
 
 """
 
-help_page =  "```" + help_message + "```"
+prefixes = ['!', '?', '&', '`']
+
+help_page =  "```" + _help_message + "```"
 
 token = 'NDcyNjk1MTI0MjgzODgzNTQy.Dj3Hfg.QbQrajkO0cH11vG_spUvrAQ6bTk'
 
