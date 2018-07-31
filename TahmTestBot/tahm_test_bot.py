@@ -196,12 +196,16 @@ async def nick(ctx):
     nicks = [
         "Needed a New Nickname",
         "Melon Lord",
-        "GOAT"
+        "GOAT",
+        "Barack Obama",
+        "John Cena"
     ]
     new_nick = random.choice(nicks)
-    await ctx.bot.change_nickname(author, new_nick)
-    await ctx.bot.say(f"You have been knighted as {new_nick}, " + author.mention)
-
+    try:
+        await ctx.bot.say(f"You have been knighted as {new_nick}, " + author.mention)
+        await ctx.bot.change_nickname(author, new_nick)
+    except discord.Forbidden:
+        await ctx.bot.say("However, I do not seem to have the rights to change your name.")
 
 @bot.command(pass_context=True)
 async def note(ctx, *args):
