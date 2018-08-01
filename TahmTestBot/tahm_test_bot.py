@@ -6,7 +6,7 @@ BOT_PREFIX = '&'
 TOKEN = "NDcxNzkxNDgxNTMxNjYyMzM3.Dj589w.JT1galpWvN67pex0iOldHdcUhps"
 
 # Some static variables to use for TTT
-E = ' '
+E = '.'
 X = 'X'
 O = 'O'
 BOARD = [
@@ -25,7 +25,7 @@ bot = commands.Bot(command_prefix=BOT_PREFIX)
 bot.remove_command('help')
 
 
-### HELPER FUNCTIONS ###
+# HELPER FUNCTIONS #
 
 
 def board_display():
@@ -33,7 +33,7 @@ def board_display():
     Displays what the current state of the board is
     :return: None
     '''
-    board = f'''
+    board_str = f'''
    TIC  TAC  TOE
 
      1   2   3
@@ -45,7 +45,7 @@ def board_display():
  3 | {BOARD[2][0]} | {BOARD[2][1]} | {BOARD[2][2]} |
    -------------
 '''
-    return "```" + board + "```"
+    return "```" + board_str + "```"
 
 
 def clear():
