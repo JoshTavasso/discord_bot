@@ -22,6 +22,9 @@ REMINDERS = {}
 
 bot = commands.Bot(command_prefix=BOT_PREFIX)
 
+# adds the test.py commands
+bot.load_extension('test')
+
 bot.remove_command('help')
 
 
