@@ -3,8 +3,6 @@ music.py
 Contains commands related to music features
 '''
 
-#### IMPORTS ####
-
 # discord.py module
 import discord
 
@@ -17,18 +15,13 @@ from utility.Queue import Queue
 # youtube functions
 import utility.youtube as youtube
 
-
-#### MUSIC CLASS OBJECT: CONTAINS COMMANDS ####
-
 class Music:
 	def __init__(self, bot):
 		# voice object, needed for putting bot in and out 
 		# of voice channel
 		self.current_voice = None
 
-		# the song player, needed as global so
-		# the user can stop the player when calling
-		# the stop command
+		# the song player
 		self.player = None
 
 		# Eventually set as a dictionary
@@ -44,12 +37,15 @@ class Music:
 
 		# The queue which holds the next songs
 		# to be played
+		# Each "song" in the queue is a list
+		# where the first index is the song title
+		# and second index is the youtube URL
 		self.music_queue = Queue()
 
 
 	#### HELPER FUNCTIONS ####
 
-	async def _join_voice(self, ctx, channel) -> 'voice object':
+	async def _join_voice(self, ctx, channel, to_play = False) -> 'voice object':
 	    '''
 	    Helper function that joins
 	    voice channel
@@ -62,21 +58,24 @@ class Music:
 	    currently in
 	    '''
 	    voice = await ctx.bot.join_voice_channel(channel)
-	    await ctx.bot.say("Joining Your Voice Channel")
+	    if not to_play:
+	    	await ctx.bot.say("Joining Your Voice Channel")
 	    return voice
     
-	async def _leave_voice(self, ctx):
-	    '''
-	    Helper function that leaves
-	    voice channel
-	    for organization purposes since 
-	    the process of leaving a voice channel
-	    is used multiple times
-	    '''
-	    await ctx.bot.say("Leaving Your Voice Channel")
-	    for voice_client in ctx.bot.voice_clients:
-	        if (voice_client.server == ctx.message.server):
-	            return await voice_client.disconnect()
+	async def _leave_voice(self, ctx, to_play = False):
+		'''
+		Helper function that leaves
+		voice channel
+		for organization purposes since 
+		the process of leaving a voice channel
+		is used multiple times
+		'''
+		if not to_play: 
+			await ctx.bot.say("Leaving Your Voice Channel")
+		for voice_client in ctx.bot.voice_clients:
+			if (voice_client.server == ctx.message.server):
+				self.current_voice = None
+				return await voice_client.disconnect()
 
 	async def _play_next(self, ctx):
 	    '''
@@ -95,7 +94,28 @@ class Music:
 	        await self._play_song(ctx, url)
 
 	    else:
-	        await ctx.bot.say('No more songs in the Queue!')
+	        await ctx.bot.say('No songs in the Queue!')
+
+	async def _play_from_results(self, ctx, user_choice: int):
+		'''
+		This function is called when the user inputted
+		an input such as: !play 5, meaning they want
+		to play a song from the most recent search
+		results
+		'''
+
+		#first check if search result exists
+		if self.current_search == "" or self.current_search == None: 
+			return await ctx.bot.say("You didn't specify a search")
+
+		# displaying 10 results for now, so user input
+		# needs to be within 1-10
+		if user_choice <= 10 and user_choice > 0:
+			urls = list(self.video_data.values())
+			desired_url = urls[user_choice-1]
+			await self._play_song(ctx, desired_url)
+		else:
+			await ctx.bot.say("That isn't in the video results!")
 
 	async def _play_song(self, ctx, url):
 	    '''
@@ -121,14 +141,13 @@ class Music:
 
 	    s = "```"
 	    for i in range(10):
-	        '''beware of playlists'''
 	        s+="\n{}. {}".format(i+1, list(video_data.keys())[i])
 	    s += "\n```"
 
 	    await ctx.bot.say("Here are 10 random results from the first page of results \n" + s)
 	    await ctx.bot.say("To play one of these songs, input the command: !play '# of song' ")
 
-	def _format_queue(self, music_queue):
+	def _format_queue(self, music_queue) -> str:
 	    '''
 	    given a music queue, formats
 	    its contents into a string
@@ -153,11 +172,10 @@ class Music:
 	    search on youtube, for video
 	    results
 	    '''
-	    # parse arguments
-	    self.current_search = ' '.join(args)
-	    print(self.current_search)
 
-	    if self.current_search == "": 
+	    self.current_search = ' '.join(args)
+
+	    if self.current_search == '': 
 	    	await ctx.bot.say("You didn't specify a search")
 	    else:
 	    	self.video_data = youtube.front_page_info(self.current_search)
@@ -191,33 +209,38 @@ class Music:
 	@commands.command(pass_context = True)
 	async def play(self, ctx, *args):
 	    '''
+		plays a song from the search results
+	    or youtube URL, depending on user input
+
+	    inputting: ?play next:
+	    plays next song in queue
 	    '''
 
 	    # setup
 	    member = ctx.message.author
 	    server = ctx.message.server
 	    channel = member.voice.voice_channel
+	    to_play = False
 
-	    # check if there even is a user input
+	    # check if user wants to play next song
+	    # in queue
 	    try:
 	        user_choice = args[0]
+	        if user_choice.lower() == 'next':
+	        	return await self._play_next(ctx)
 	    except IndexError:
-	        return await ctx.bot.say('Please enter a song choice')
-
-	    # if the user says next, play next
-	    # song in queue
-	    if user_choice.lower() == 'next':
 	        return await self._play_next(ctx)
 
 	    # Have the bot leave the voice channel
-	    # if it is connected, to hopefully get rid 
-	    # of the issue of 2 songs being played at once
+	    # if it is connected, to get rid of the 
+	    # the issue of 2 songs being played at once
 	    if ctx.bot.is_voice_connected(server): 
-	        await self._leave_voice(ctx)
+	    	to_play = True
+	    	await self._leave_voice(ctx, to_play)
 
 	    # Join voice channel, to be able to play audio
 	    try:
-	        self.current_voice = await self._join_voice(ctx, channel)
+	        self.current_voice = await self._join_voice(ctx, channel, to_play)
 	    except discord.errors.InvalidArgument: 
 	        return await ctx.bot.say("You are not in a Voice Channel!")
 
@@ -232,18 +255,13 @@ class Music:
 	    try:
 	        user_choice = int(args[0])
 	    except ValueError:
-	        return await ctx.bot.say("That's not a song!")
+	        await ctx.bot.say("Please use !search to search for a song,")
+	        return await ctx.bot.say("and then choose a song from !results")
 
-	    if self.current_search == "" or self.current_search == None: 
-	        return await ctx.bot.say("You didn't specify a search")
-
-	    # displaying 10 results for now, so user input
-	    # needs to be within 1-10
-	    if user_choice <= 10 and user_choice > 0: 
-	        url = list(self.video_data.values())[user_choice-1]
-	        await self._play_song(ctx, url)
-	    else:
-	    	await ctx.bot.say("That isn't in the video results!")
+	    # if the program made it here, the user
+	    # must want to play something from the 
+	    # most recent search result
+	    await self._play_from_results(ctx, user_choice)
 
 	@commands.command(pass_context = True)
 	async def stop(self, ctx):
@@ -252,7 +270,7 @@ class Music:
 	    playing
 	    '''
 
-	    if self.player != None:
+	    if self.player != None and self.current_voice != None:
 	        self.player.stop()
 	        await ctx.bot.say('Stopped the song')
 
@@ -286,10 +304,15 @@ class Music:
 	        return await ctx.bot.say("Please give me an integer, or a valid video URL")
 	    except IndexError:
 	        return await ctx.bot.say("You didn't specify a song to add")
+		
+	    urls = list(self.video_data.values())
+	    titles = list(self.video_data.keys())
 
-	    url = list(self.video_data.values())[song] if type(song) == int else song
-	    title = list(self.video_data.keys())[song] if type(song) == int else song
+	    url = urls[song] if type(song) == int else song
+	    title = titles[song] if type(song) == int else song
+
 	    self.music_queue.enqueue([title,url])
+	    
 	    await ctx.bot.say("Enqueued {}!".format(title))
 
 	@commands.command(pass_context=True)

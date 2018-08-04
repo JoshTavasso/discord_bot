@@ -25,6 +25,7 @@ class General:
 
         if len(args) == 0:
             await ctx.bot.say(help_page)
+            
         elif args[0] == 'music':
             await ctx.bot.say(music_help)
     
@@ -35,7 +36,6 @@ class General:
         For testing purposes
 
         Ex uses:
-
         !purge
         -> deletes every message that starts with '!'
 
@@ -45,17 +45,18 @@ class General:
         !purge cool
         -> deletes every message that has 'cool' in it
         '''
+
         channel = ctx.message.channel
         if len(args) == 0:
         	check = lambda msg: msg.content == "" or msg.content[0] == prefix
-        	return await ctx.bot.purge_from(channel, limit=1000, check=check)
-        if args[0].lower() == 'all':
-        	return await ctx.bot.purge_from(channel, limit=1000)
+        	await ctx.bot.purge_from(channel, limit=1000, check=check)
+        elif args[0].lower() == 'all':
+        	await ctx.bot.purge_from(channel, limit=1000)
         else:
         	thing_to_delete = ' '.join(args)
         	check = lambda msg: msg.content == "" or thing_to_delete.lower() in msg.content.lower()
-        	return await ctx.bot.purge_from(channel, limit=1000, check=check)
-        await ctx.bot.say("Messages have been purged", delete_after=life_time)
+        	await ctx.bot.purge_from(channel, limit=1000, check=check)
+        await ctx.bot.say("Purge Complete", delete_after=life_time)
 
 # adds general class to command bot
 def setup(bot):

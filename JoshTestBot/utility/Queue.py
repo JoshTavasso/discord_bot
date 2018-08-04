@@ -53,7 +53,7 @@ class Queue:
         clears this queue 
         '''
         self._queue = DoublyLinkedList()
-'''            
+'''          
 #For testing: 
 if __name__ == '__main__':
     q = Queue()
@@ -62,5 +62,5 @@ if __name__ == '__main__':
     q.enqueue(3)
     for i in q: print(i)
     for _ in range(3): print(q.dequeue())
-    print(q.is_empty())
-'''
+    print(q.is_empty())'''
+

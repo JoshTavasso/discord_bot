@@ -11,32 +11,9 @@ class Node:
 	node in a doubly linked list data 
 	structure
 	'''
-	def __init__(self, value, prev, next):
-		self._value = value
-		self._prev = prev
-		self._next = next
-
-	#### GETTERS ####
-
-	def get_value(self):
-		return self._value
-
-	def get_prev(self):
-		return self._prev
-
-	def get_next(self):
-		return self._next
-
-	#### SETTERS ####
-
-	def set_value(self, v):
-		self._value = v
-
-	def set_prev(self, p):
-		self._prev = p
-
-	def set_next(self, n):
-		self._next = n
+	value = None
+	prev = None
+	next = None
 
 class DoublyLinkedList:
 	'''
@@ -65,9 +42,17 @@ class DoublyLinkedList:
 		for loop
 		'''
 		node = self._head
-		while node:
-			yield node.get_value()
-			node = node.get_next()
+		while node != None:
+			yield node.value
+			node = node.next
+
+	def _create_node(self, value, prev, next):
+		node = Node()
+		node.value = value
+		node.prev = prev
+		node.next = next
+
+		return node
 
 	def append(self, value):
 		'''
@@ -76,15 +61,15 @@ class DoublyLinkedList:
 
 		Basically an "addToEnd" method
 		'''
-		new_node = Node(value, None, None)
+		new_node = self._create_node(value, None, None)
 
 		if self._head == None:
 			self._head = new_node
 			self._tail = new_node
 
 		else:
-			self._tail.set_next(new_node)
-			new_node.set_prev(self._tail)
+			self._tail.next = new_node
+			new_node.prev = self._tail
 			self._tail = new_node
 
 		self._size += 1
@@ -101,15 +86,15 @@ class DoublyLinkedList:
 		val = None
 
 		if self._size == 1:
-			val = self._head.get_value()
+			val = self._head.value
 			self._head = self._tail = None
 
 		elif self._size > 1:
-			val = self._head.get_value()
-			next_node = self._head.get_next()
+			val = self._head.value
+			next_node = self._head.next
 			self._head = next_node
 			if self._head != None: 
-				self._head.set_prev(None)
+				self._head.prev = None
 
 		self._size -= 1
 

@@ -9,7 +9,7 @@ import discord
 from discord.ext import commands
 
 # data needed for bot
-from utility.data import prefix, help_page, token, life_time, bot_extensions
+from utility.data import prefix, help_page, token, bot_extensions
 
 # discord command bot
 bot = commands.Bot(command_prefix=prefix)

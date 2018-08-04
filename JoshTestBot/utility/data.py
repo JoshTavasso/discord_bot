@@ -34,7 +34,7 @@ Music Commands:
     play a song from the search results
     or paste in a youtube URL
 
-    ?play next ->
+    ?play OR ?play next ->
         plays next song in queue
 
 ?stop ->

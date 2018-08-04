@@ -11,7 +11,6 @@ when importing something
 
 So, 'commands' folder basically just
 contains all of the commands we
-implement, aside from the general ones
-like 'help'
+implement
 
 '''
