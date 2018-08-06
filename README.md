@@ -1,5 +1,5 @@
-# discord_bot
+# Discord Variety Bot
 
-**Discord Bot in progress**
+**A Bot that servers many different purposes**
 
 **by JoshT and Tahm**

@@ -11,11 +11,23 @@ import discord
 from discord.ext import commands
 
 # data needed for bot
-from utility.data import prefix, life_time
+from utility.data import prefix, help_page, music_help, life_time
 
 class General:
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.command(pass_context = True)
+    async def help(self, ctx, *args):
+        '''
+        Displays Help Page
+        '''
+
+        if len(args) == 0:
+            await ctx.bot.say(help_page)
+            
+        elif args[0] == 'music':
+            await ctx.bot.say(music_help)
     
     @commands.command(pass_context=True)
     async def purge(self, ctx, *args):

@@ -125,7 +125,7 @@ class Music:
 	    if self.player != None:
 	        self.player.stop()
 
-	    await ctx.bot.say('...downloading the video')
+	    await ctx.bot.say('Downloading song...')
 	    self.player = await self.current_voice.create_ytdl_player(url, ytdl_options=youtube.opts)
 	    self.player.start()
 
@@ -144,7 +144,7 @@ class Music:
 	        s+="\n{}. {}".format(i+1, list(video_data.keys())[i])
 	    s += "\n```"
 
-	    await ctx.bot.say("Here are 10 random results from the first page of results \n" + s)
+	    await ctx.bot.say("Here are 10 random results from the first page of youtube search results \n" + s)
 	    await ctx.bot.say("To play one of these songs, input the command: !play '# of song' ")
 
 	def _format_queue(self, music_queue) -> str:
@@ -178,8 +178,8 @@ class Music:
 	    if self.current_search == '': 
 	    	await ctx.bot.say("You didn't specify a search")
 	    else:
+	    	await ctx.bot.say("Searching...")
 	    	self.video_data = youtube.front_page_info(self.current_search)
-	    	await ctx.bot.say("Your search was accepted!")
 	    	await self._display_results(ctx, self.video_data)
 
 	@commands.command(pass_context = True)
