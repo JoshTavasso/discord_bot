@@ -1,5 +1,5 @@
 # Discord Variety Bot
 
-**A Bot that servers many different purposes**
+**A Bot that serves many different purposes, from music commands, to fun, interactive games!**
 
 **by JoshT and Tahm**
