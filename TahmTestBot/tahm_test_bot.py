@@ -5,17 +5,6 @@ from discord.ext import commands
 BOT_PREFIX = '&'
 TOKEN = "NDcxNzkxNDgxNTMxNjYyMzM3.Dj589w.JT1galpWvN67pex0iOldHdcUhps"
 
-# Some static variables to use for TTT
-E = '.'
-X = 'X'
-O = 'O'
-BOARD = [
-    [E, E, E],
-    [E, E, E],
-    [E, E, E]
-    ]
-FIRST = X
-
 # Reminders (for now) are set in a dictionary using the author of the command as a key,
 # with a list of strings as the value
 REMINDERS = {}
@@ -28,72 +17,15 @@ bot.load_extension('test')
 bot.remove_command('help')
 
 
-# HELPER FUNCTIONS #
-
-
-def board_display():
-    '''
-    Displays what the current state of the board is
-    :return: None
-    '''
-    board_str = f'''
-   TIC  TAC  TOE
-
-     1   2   3
-   -------------
- 1 | {BOARD[0][0]} | {BOARD[0][1]} | {BOARD[0][2]} |
-   -------------
- 2 | {BOARD[1][0]} | {BOARD[1][1]} | {BOARD[1][2]} |
-   -------------
- 3 | {BOARD[2][0]} | {BOARD[2][1]} | {BOARD[2][2]} |
-   -------------
-'''
-    return "```" + board_str + "```"
-
-
-def clear():
-    '''
-    Clears the board and replaces all cells with 'E'
-    :return: None
-    '''
-    for row in range(3):
-        for col in range(3):
-            BOARD[row][col] = E
-
-
-def place(r, c):
-    '''
-    Places an X or an O in a given cell
-    :param r: the row number
-    :param c: the column number
-    :return: None
-    '''
-    BOARD[r][c] = FIRST
-
-
-def switch():
-    '''
-    Switches the current player from X to O, and vice versa
-    :return: None
-    '''
-    global FIRST
-    if FIRST == X:
-        FIRST = O
-    else:
-        FIRST = X
-
-
 def erase_list(author):
     '''
     Empties the list of reminders from a single user
-    :param author: User object, found with ctx.message.author
-    :return: None
     '''
     if author in REMINDERS.keys():
         REMINDERS[author] = []
 
 
-### COMMANDS ###
+# COMMANDS #
 
 
 @bot.command(pass_context=True)
@@ -156,7 +88,7 @@ async def purge(ctx):
     await ctx.bot.purge_from(channel, limit=1000, check=check)    
     await ctx.bot.say("Purge Complete", delete_after=10)
 
-
+"""
 @bot.command(pass_context=True)
 async def board(ctx):
     '''
@@ -186,7 +118,8 @@ async def move(ctx, *args):
         switch()
     else:
         await ctx.bot.say(f"Space ({r}, {c}) is already taken!")
-    await ctx.bot.say(board_display())
+    await ctx.bot.say(board_display()) 
+"""
 
 
 @bot.command(pass_context=True)
