@@ -10,9 +10,21 @@ token = 'NDc1Nzk4MjcxNzk3ODg3MDA4.Dklzww.TrpO2-ztzajhpqnWInluqoia7xU'
 # message life time
 life_time = 10
 
-bot_extensions = ['commands.music', 'commands.general']
+bot_extensions = ['commands.music', 'commands.general', 'commands.emoji']
 
 prefix = '!'
+
+_emoji_message = f"""
+
+Emoji Commands:
+
+{prefix}emoji <emoji name>
+    creates an emoji, given an 
+    image in jpg or png format
+
+{prefix}remove <emoji name>
+    removes the emoji
+"""
 
 _music_message = f"""
 
@@ -74,11 +86,16 @@ A Multi Purpose Bot
 {prefix}help music ->
     Shows Music related commands
 
+{prefix}help emoji ->
+    Shows Emoji related commands
+
 {prefix}help ->
     This message.
 
 """
 
 music_help = "```" + _music_message + "```"
+
+emoji_help =  "```" + _emoji_message + "```"
 
 help_page =  "```" + _help_message + "```"
