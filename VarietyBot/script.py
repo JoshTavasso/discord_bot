@@ -10,10 +10,10 @@ import discord
 from discord.ext import commands
 
 # data needed for bot
-from utility.general.data import prefix, help_page, token, bot_extensions
+from utility.general.data import default_prefix, help_page, token, bot_extensions
 
 # discord command bot
-bot = commands.Bot(command_prefix=prefix)
+bot = commands.Bot(command_prefix=default_prefix)
 
 # Remove default help command 
 # to create a better one
@@ -50,6 +50,7 @@ async def on_ready():
     print(bot.user.id)
     print('------')
 
+    '''
     
     # greet the server
     for server in bot.servers: 
@@ -60,6 +61,7 @@ async def on_ready():
 	                break
 	        except discord.errors.HTTPException:
 	        	pass
+    '''
 
 if __name__ == '__main__':
 	bot.run(token)

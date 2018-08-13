@@ -16,9 +16,10 @@ bot_extensions = [
                   'utility.general.commands'
                   ]
 
-prefix = '!'
+default_prefix = '!'
 
-_emoji_message = f"""
+def emoji_help(prefix):
+    _emoji_message = f"""
 
 Emoji Commands:
 
@@ -30,7 +31,11 @@ Emoji Commands:
     removes the emoji
 """
 
-_music_message = f"""
+    return "```" + _emoji_message + "```"
+
+
+def music_help(prefix):
+    _music_message = f"""
 
 Music Commands:
 
@@ -70,13 +75,21 @@ Music Commands:
     Displays the song that is currently playing
 
 """
-_help_message = f"""
+
+    return "```" + _music_message + "```"
+
+def help_page(prefix):
+    _help_message = f"""
 
 Variety Bot!
 
 A Multi Purpose Bot
 
-{prefix}purge "words here"->
+{prefix}prefix <arg> ->
+    User can change the prefix 
+    of this bot
+
+{prefix}purge <args> ->
     Mass Delete Messages that have key prefixes.
     For testing purposes.
     Ex uses:
@@ -98,8 +111,4 @@ A Multi Purpose Bot
 
 """
 
-music_help = "```" + _music_message + "```"
-
-emoji_help =  "```" + _emoji_message + "```"
-
-help_page =  "```" + _help_message + "```"
+    return "```" + _help_message + "```"

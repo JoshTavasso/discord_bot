@@ -9,7 +9,7 @@ import discord
 from discord.ext import commands
 
 # data needed for bot
-from utility.general.data import prefix, help_page, music_help, emoji_help, life_time
+from utility.general.data import help_page, music_help, emoji_help, life_time
 
 class General:
     def __init__(self, bot):
@@ -21,14 +21,29 @@ class General:
         Displays Help Page
         '''
 
+        prefix = ctx.bot.command_prefix
+
         if len(args) == 0:
-            await ctx.bot.say(help_page)
+            await ctx.bot.say(help_page(prefix))
             
         elif args[0] == 'music':
-            await ctx.bot.say(music_help)
+            await ctx.bot.say(music_help(prefix))
 
         elif args[0] == 'emoji':
-            await ctx.bot.say(emoji_help)
+            await ctx.bot.say(emoji_help(prefix))
+
+    @commands.command(pass_context = True)
+    async def prefix(self, ctx, *args):
+        '''
+        changes the prefix 
+        of the bot
+        '''
+
+        if len(args) == 0:
+            return await ctx.bot.say("Please specify a prefix")
+
+        ctx.bot.command_prefix = args[0]
+        await ctx.bot.say(f"Prefix now set to {ctx.bot.command_prefix}")
     
     @commands.command(pass_context=True)
     async def purge(self, ctx, *args):

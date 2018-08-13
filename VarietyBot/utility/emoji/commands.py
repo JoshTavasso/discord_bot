@@ -21,14 +21,14 @@ class Emoji:
                 return await response.read()
 
     def _save_image(self, image:'string of image bytes'):
-        file = open('img.png', 'wb')
+        file = open('utility/emoji/img.png', 'wb')
         file.write(image)
         file.close()
 
     async def _create_emoji(self, ctx, msg_info: dict, emoji_name: str, server):
         img = await self._get_image(msg_info['url'])
         self._save_image(img)
-        img_file = open('img.png', 'rb')
+        img_file = open('utility/emoji/img.png', 'rb')
         await ctx.bot.create_custom_emoji(server, name = emoji_name, image = img_file.read())
         await ctx.bot.say(f"{emoji_name} emoji created!")
         img_file.close()
