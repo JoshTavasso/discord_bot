@@ -9,8 +9,9 @@ tells the program to include this
 folder as a library to look in 
 when importing something
 
-So, 'commands' folder basically just
-contains all of the commands we
-implement
+This 'general' folder contains
+all general info, such as 
+the 'help' command, token data,
+etc
 
 '''

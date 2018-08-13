@@ -2,7 +2,7 @@
 Queue.py
 Contains a Queue implementation
 '''
-from utility.DoublyLinkedList import DoublyLinkedList
+from utility.music.DoublyLinkedList import DoublyLinkedList
 
 class Queue:
 

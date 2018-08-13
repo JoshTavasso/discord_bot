@@ -9,8 +9,8 @@ tells the program to include this
 folder as a library to look in 
 when importing something
 
-So, 'commands' folder basically just
-contains all of the commands we
-implement
+So, 'emoji' folder contains all 
+files related to emoji features
+in this project
 
 '''

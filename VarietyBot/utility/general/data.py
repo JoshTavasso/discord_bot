@@ -10,7 +10,11 @@ token = 'NDc1Nzk4MjcxNzk3ODg3MDA4.Dklzww.TrpO2-ztzajhpqnWInluqoia7xU'
 # message life time
 life_time = 10
 
-bot_extensions = ['commands.music', 'commands.general', 'commands.emoji']
+bot_extensions = [
+                  'utility.music.commands', 
+                  'utility.emoji.commands', 
+                  'utility.general.commands'
+                  ]
 
 prefix = '!'
 

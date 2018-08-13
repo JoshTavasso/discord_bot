@@ -1,5 +1,5 @@
 '''
-emoji.py
+emoji commands
 
 commands that deal with emojis
 '''

@@ -1,6 +1,5 @@
 '''
-music.py
-Contains commands related to music features
+Music Commands
 '''
 
 # discord.py module
@@ -10,10 +9,10 @@ import discord
 from discord.ext import commands
 
 # Queue to store songs
-from utility.Queue import Queue
+from utility.music.Queue import Queue
 
 # youtube functions
-import utility.youtube as youtube
+import utility.music.youtube as youtube
 
 class Music:
 	def __init__(self, bot):

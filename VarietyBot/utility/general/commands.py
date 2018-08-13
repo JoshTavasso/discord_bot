@@ -1,6 +1,4 @@
 '''
-general.py
-
 contains general commands 
 '''
 
@@ -11,7 +9,7 @@ import discord
 from discord.ext import commands
 
 # data needed for bot
-from utility.data import prefix, help_page, music_help, emoji_help, life_time
+from utility.general.data import prefix, help_page, music_help, emoji_help, life_time
 
 class General:
     def __init__(self, bot):
