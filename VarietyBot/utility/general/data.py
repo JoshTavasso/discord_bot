@@ -11,7 +11,7 @@ token = 'NDc1Nzk4MjcxNzk3ODg3MDA4.Dklzww.TrpO2-ztzajhpqnWInluqoia7xU'
 life_time = 10
 
 bot_extensions = [
-                  'utility.music.commands', 
+                  'utility.voice.commands', 
                   'utility.emoji.commands', 
                   'utility.general.commands'
                   ]
@@ -37,7 +37,7 @@ Emoji Commands:
 def music_help(prefix):
     _music_message = f"""
 
-Music Commands:
+Music/Voice Commands:
 
 {prefix}join ->
     Join Voice Channel
@@ -54,18 +54,13 @@ Music Commands:
 {prefix}queue ->
     displays songs in queue
 
-{prefix}enqueue <song> ->
-    add a song to a queue
-
-{prefix}clearqueue ->
-    clears the queue
-
 {prefix}play <song> ->
     play a song from the search results
     or paste in a youtube URL
 
-    play OR play next ->
-        plays next song in queue
+    If a song is currently playing,
+    this commands adds the requested song
+    to the queue
 
 {prefix}stop ->
     stops the song that is currently playing
@@ -81,7 +76,7 @@ Music Commands:
 def help_page(prefix):
     _help_message = f"""
 
-Variety Bot!
+~Variety Bot~
 
 A Multi Purpose Bot
 

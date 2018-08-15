@@ -21,7 +21,7 @@ from bs4 import BeautifulSoup
 # pip3 install youtube_dl
 import youtube_dl
 
-#### constants ####
+#### CONSTANTS ####
 
 # youtube options when downloading a video
 opts = dict(

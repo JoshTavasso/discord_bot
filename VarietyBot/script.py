@@ -23,13 +23,6 @@ bot.remove_command('help')
 for ext in bot_extensions:
     bot.load_extension(ext)
 
-'''
-Error message is commented out for now
-so we can see the errors in our terminal
-while debugging
-This will be uncommented once bot is completely finished
-'''
-"""
 @bot.event
 async def on_command_error(error, ctx):
     '''
@@ -37,8 +30,9 @@ async def on_command_error(error, ctx):
     an error occurs when a command is inputted.
     This gives them the help page
     '''
-    await bot.send_message(ctx.message.channel, "An error occured, maybe you inputted a wrong command\n{}".format(help_page))
-"""
+    await bot.send_message(ctx.message.channel, "An error occured, maybe you inputted a wrong command.")
+    await bot.send_message(ctx.message.channel, "Here is the Help Page:\n{}".format(
+                            help_page(ctx.bot.command_prefix)))
 
 @bot.event
 async def on_ready():

@@ -9,8 +9,8 @@ tells the program to include this
 folder as a library to look in 
 when importing something
 
-So, 'music' folder basically just
+So, 'voice' folder basically just
 contains all of the files related 
-to the music features in this project
+to the music/voice features in this project
 
 '''

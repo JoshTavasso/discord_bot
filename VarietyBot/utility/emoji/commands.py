@@ -11,27 +11,25 @@ from discord.ext import commands
 import aiohttp
 
 class Emoji:
-    async def _get_image(self, url: str) -> 'string of image bytes':
+    async def _get_image_info(self, url: str) -> 'string of image bytes':
         '''
-        retrieves image given a url to
+        retrieves image info given a url to
         of an image
         '''
         async with aiohttp.get(url) as response:
             if response.status == 200:
                 return await response.read()
 
-    def _save_image(self, image:'string of image bytes'):
-        file = open('utility/emoji/img.png', 'wb')
-        file.write(image)
-        file.close()
-
     async def _create_emoji(self, ctx, msg_info: dict, emoji_name: str, server):
-        img = await self._get_image(msg_info['url'])
-        self._save_image(img)
-        img_file = open('utility/emoji/img.png', 'rb')
-        await ctx.bot.create_custom_emoji(server, name = emoji_name, image = img_file.read())
+        '''
+        Given a dictionary of info regarding the user's
+        message attachments, this function retrieves 
+        info of the attachment (assuming it is a jpg or
+        png file), and creates a custon emoji using the file
+        '''
+        img_info = await self._get_image_info(msg_info['url'])
+        await ctx.bot.create_custom_emoji(server, name = emoji_name, image = img_info)
         await ctx.bot.say(f"{emoji_name} emoji created!")
-        img_file.close()
 
     @commands.command(pass_context=True)
     async def emoji(self, ctx, *args):
@@ -55,6 +53,10 @@ class Emoji:
 
     @commands.command(pass_context=True)
     async def remove(self, ctx, name):
+        '''
+        Removes the specified emoji
+        '''
+        
         server = ctx.message.server
         for e in server.emojis:
             if name == e.name:
