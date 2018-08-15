@@ -19,9 +19,9 @@ from utility.voice.Queue import Queue
 
 
 class VoiceEntry:
-	'''
-	A VoiceEntry represents a 'song' object
-	'''
+    '''
+    A VoiceEntry represents a 'song' object
+    '''
     def __init__(self, message, player):
         self.requester = message.author
         self.channel = message.channel
@@ -36,13 +36,13 @@ class VoiceEntry:
 
 class VoiceState:
     def __init__(self, bot):
-    	'''
-    	A VoiceState deals with
-    	VoiceEntry objects. Uses
-    	the VoiceEntries to play and
-    	store songs
-    	'''
-    	# current VoiceEntry
+        '''
+        A VoiceState deals with
+        VoiceEntry objects. Uses
+        the VoiceEntries to play and
+        store songs
+        '''
+        # current VoiceEntry
         self.current = None
 
         # discord.py voice object
@@ -64,18 +64,33 @@ class VoiceState:
         self.audio_player = self.bot.loop.create_task(self.audio_player_task())
 
     def is_playing(self) -> bool:
+        '''
+        returns boolean on whether a song is playing
+        currently
+        '''
         if self.voice == None or self.current == None:
             return False
         return not self.current.player.is_done()
 
     @property
     def player(self):
+        '''
+        returns the music player object
+        '''
         return self.current.player
 
     def toggle_next(self):
+        '''
+        plays next song
+        '''
         self.bot.loop.call_soon_threadsafe(self.play_next_song.set)
 
     async def audio_player_task(self):
+        '''
+        An ongoing loop that waits for 
+        the song to be finished, and plays
+        the next song in the queue
+        '''
         while True:
             self.play_next_song.clear()
             self.current = await self.songs.get()
