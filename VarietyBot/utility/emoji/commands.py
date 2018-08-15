@@ -1,6 +1,4 @@
 '''
-emoji commands
-
 commands that deal with emojis
 '''
 
@@ -11,10 +9,13 @@ from discord.ext import commands
 import aiohttp
 
 class Emoji:
+
+    #### HELPER FUNCTIONS ####
+
     async def _get_image_info(self, url: str) -> 'string of image bytes':
         '''
         retrieves image info given a url to
-        of an image
+        an image
         '''
         async with aiohttp.get(url) as response:
             if response.status == 200:
@@ -30,6 +31,8 @@ class Emoji:
         img_info = await self._get_image_info(msg_info['url'])
         await ctx.bot.create_custom_emoji(server, name = emoji_name, image = img_info)
         await ctx.bot.say(f"{emoji_name} emoji created!")
+
+    #### COMMANDS ####
 
     @commands.command(pass_context=True)
     async def emoji(self, ctx, *args):

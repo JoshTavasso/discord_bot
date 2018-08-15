@@ -5,7 +5,7 @@ module for youtube related features
 
 #### IMPORTS ####
 
-# python3 native (First party)
+# First Party (python3 native)
 
 from __future__ import unicode_literals
 import urllib

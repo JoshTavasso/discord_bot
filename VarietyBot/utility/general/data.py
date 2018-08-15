@@ -16,7 +16,7 @@ bot_extensions = [
                   'utility.general.commands'
                   ]
 
-default_prefix = '!'
+default_prefix = '$'
 
 def emoji_help(prefix):
     _emoji_message = f"""

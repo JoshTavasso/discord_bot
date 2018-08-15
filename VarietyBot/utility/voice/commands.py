@@ -1,14 +1,25 @@
 '''
 contains voice commands
+
+Voice objects used for voice commands
+
+Heavily based on the discord.py music example
+found @ https://github.com/Rapptz/discord.py/blob/master/examples/playlist.py
+
 '''
+# module for Asynchronous funtions
 import asyncio
 
+# discord.py module
 import discord
 
+# discord command module
 from discord.ext import commands
 
+# youtube functions
 import utility.voice.youtube as youtube
 
+# voice objects
 from utility.voice.VoiceObjects import VoiceEntry, VoiceState
 
 class VoiceCommands:

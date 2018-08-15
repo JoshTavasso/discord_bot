@@ -1,11 +1,27 @@
+'''
+VoiceObjects.py
+
+Voice objects used for voice commands
+
+Heavily based on the discord.py music example
+found @ https://github.com/Rapptz/discord.py/blob/master/examples/playlist.py
+
+'''
+
+# module for Asynchronous funtions
 import asyncio
 
+# discord.py module
 import discord
 
+# Queue implementation
 from utility.voice.Queue import Queue
 
 
 class VoiceEntry:
+	'''
+	A VoiceEntry represents a 'song' object
+	'''
     def __init__(self, message, player):
         self.requester = message.author
         self.channel = message.channel
@@ -20,12 +36,31 @@ class VoiceEntry:
 
 class VoiceState:
     def __init__(self, bot):
+    	'''
+    	A VoiceState deals with
+    	VoiceEntry objects. Uses
+    	the VoiceEntries to play and
+    	store songs
+    	'''
+    	# current VoiceEntry
         self.current = None
+
+        # discord.py voice object
         self.voice = None
+
+        # discord command bot
         self.bot = bot
+
+        # Asyncio event that deals with playing next song
         self.play_next_song = asyncio.Event()
+
+        # Queue of VoiceEntries
         self.songs = asyncio.Queue()
+
+        # Queue of Song titles
         self.music_queue = Queue()
+
+        # Deals with playing/waiting for next song
         self.audio_player = self.bot.loop.create_task(self.audio_player_task())
 
     def is_playing(self) -> bool:

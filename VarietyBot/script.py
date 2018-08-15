@@ -24,15 +24,28 @@ for ext in bot_extensions:
     bot.load_extension(ext)
 
 @bot.event
+async def on_server_join(server):
+    '''
+    Gives the server a welcome message
+    when the bot first joins a server
+    '''
+    for channel in server.channels:
+        if (str(channel) == 'general'):
+            return await bot.send_message(
+                channel, "Hello There! Use {}help to see what I do!".format(default_prefix))
+
+@bot.event
 async def on_command_error(error, ctx):
     '''
     For if a user says a wrong command, or
     an error occurs when a command is inputted.
     This gives them the help page
     '''
-    await bot.send_message(ctx.message.channel, "An error occured, maybe you inputted a wrong command.")
-    await bot.send_message(ctx.message.channel, "Here is the Help Page:\n{}".format(
-                            help_page(ctx.bot.command_prefix)))
+    await bot.send_message(ctx.message.channel, 
+        "An error occured, maybe you inputted a wrong command.")
+    await bot.send_message(ctx.message.channel, 
+        "Here is the Help Page:\n{}".format(
+            help_page(ctx.bot.command_prefix)))
 
 @bot.event
 async def on_ready():
@@ -43,19 +56,6 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print('------')
-
-    '''
-    
-    # greet the server
-    for server in bot.servers: 
-        for channel in server.channels:
-        	try: 
-	            if channel.permissions_for(server.me).send_messages:
-	                await bot.send_message(channel, "Hello There! Use {}help to see what I do!".format(prefix))
-	                break
-	        except discord.errors.HTTPException:
-	        	pass
-    '''
 
 if __name__ == '__main__':
 	bot.run(token)
