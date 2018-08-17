@@ -1,9 +1,7 @@
 '''
 contains voice commands
 
-Voice objects used for voice commands
-
-Heavily based on the discord.py music example
+Based on the discord.py music example
 found @ https://github.com/Rapptz/discord.py/blob/master/examples/playlist.py
 
 '''
@@ -49,7 +47,7 @@ class VoiceCommands:
         s += "\n```"
 
         await ctx.bot.say("Here are 10 random results from the first page of youtube search results \n" + s)
-        await ctx.bot.say("To play one of these songs, input the command: !play '# of song' ")
+        await ctx.bot.say("To play one of these songs, input the command: {}play '# of song' ".format(ctx.bot.command_prefix))
 
     async def _display_queue(self, ctx, music_queue):
         '''

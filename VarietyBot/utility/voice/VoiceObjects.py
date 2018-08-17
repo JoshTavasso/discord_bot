@@ -3,7 +3,7 @@ VoiceObjects.py
 
 Voice objects used for voice commands
 
-Heavily based on the discord.py music example
+Based on the discord.py music example
 found @ https://github.com/Rapptz/discord.py/blob/master/examples/playlist.py
 
 '''

@@ -10,7 +10,10 @@ import discord
 from discord.ext import commands
 
 # data needed for bot
-from utility.general.data import default_prefix, help_page, token, bot_extensions
+from utility.general.data import default_prefix, token, bot_extensions
+
+# helper functions
+from utility.general.helper import help_page, send_welcome_msg
 
 # discord command bot
 bot = commands.Bot(command_prefix=default_prefix)
@@ -23,22 +26,13 @@ bot.remove_command('help')
 for ext in bot_extensions:
     bot.load_extension(ext)
 
-async def _send_welcome_msg(server):
-    '''
-    Sends welcome message to server
-    '''
-    for channel in server.channels:
-        if (str(channel) == 'general'):
-            return await bot.send_message(
-                channel, "Hello There! Use {}help to see what I do!".format(default_prefix))
-
 @bot.event
 async def on_server_join(server):
     '''
     Gives the server a welcome message
     when the bot first joins a server
     '''
-    await _send_welcome_msg(server)
+    await send_welcome_msg(bot, server)
 
 @bot.event
 async def on_command_error(error, ctx):
@@ -64,7 +58,7 @@ async def on_ready():
     print(bot.user.id)
     print('------')
 
-    await _send_welcome_msg(list(bot.servers)[0])
+    await send_welcome_msg(bot, list(bot.servers)[0])
 
 if __name__ == '__main__':
 	bot.run(token)

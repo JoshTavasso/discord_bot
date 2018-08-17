@@ -9,7 +9,10 @@ import discord
 from discord.ext import commands
 
 # data needed for bot
-from utility.general.data import help_page, music_help, emoji_help, life_time
+from utility.general.data import life_time
+
+# helper functions
+from utility.general.helper import help_page, emoji_help, music_help
 
 class General:
     def __init__(self, bot):
@@ -52,19 +55,19 @@ class General:
         For testing purposes
 
         Ex uses:
-        !purge
+        purge
         -> deletes every message that starts with '!'
 
-        !purge all
+        purge all
         -> deletes all messages in channel
 
-        !purge cool
+        purge cool
         -> deletes every message that has 'cool' in it
         '''
 
         channel = ctx.message.channel
         if len(args) == 0:
-        	check = lambda msg: msg.content == "" or msg.content[0] == prefix
+        	check = lambda msg: msg.content == "" or msg.content[0] == ctx.bot.command_prefix
         	await ctx.bot.purge_from(channel, limit=1000, check=check)
         elif args[0].lower() == 'all':
         	await ctx.bot.purge_from(channel, limit=1000)
