@@ -33,7 +33,7 @@ async def on_server_join(server):
     when the bot first joins a server
     '''
     await send_welcome_msg(bot, server)
-"""
+
 @bot.event
 async def on_command_error(error, ctx):
     '''
@@ -45,7 +45,7 @@ async def on_command_error(error, ctx):
         "An error occured, maybe you inputted a wrong command.")
     await bot.send_message(ctx.message.channel, 
         "Here is the Help Page:\n{}".format(
-            help_page(ctx.bot.command_prefix)))"""
+            help_page(ctx.bot.command_prefix)))
 
 @bot.event
 async def on_ready():
@@ -58,7 +58,7 @@ async def on_ready():
     print(bot.user.id)
     print('------')
 
-    #await send_welcome_msg(bot, list(bot.servers)[0])
+    await send_welcome_msg(bot, list(bot.servers)[0])
 
 if __name__ == '__main__':
 	bot.run(token)
