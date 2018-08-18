@@ -91,11 +91,11 @@ A Multi Purpose Bot
     Mass Delete Messages that have key prefixes.
     For testing purposes.
     Ex uses:
-    ?purge
-    -> deletes every message that starts with '!'
-    ?purge all
+    {prefix}purge
+    -> deletes every message that starts with '{prefix}'
+    {prefix}purge all
     -> deletes all messages in channel
-    ?purge cool
+    {prefix}purge cool
     -> deletes every message that has 'cool' in it
 
 {prefix}help music ->

@@ -77,6 +77,35 @@ class VoiceCommands:
         await ctx.bot.say("Joining Your Voice Channel")
         return voice
 
+    async def _get_song_choice(self, ctx, args) -> 'url or None':
+        '''
+        checks user input and returns
+        depending on whether the user
+        input is valid or not
+        '''
+        # check if user input is a number
+        try:
+            user_choice = int(args[0])
+        except ValueError:
+            await ctx.bot.say("Please use the search command to search for a song,")
+            await ctx.bot.say("and then choose a song from the search results")
+            return None
+
+        # check if the user actually made a search
+        if self.current_search == "" or self.current_search == None: 
+            await ctx.bot.say("You didn't specify a search")
+            return None
+
+        # Only allowing 10 results for now, so user input
+        # needs to be within 1-10
+        if user_choice <= 10 and user_choice > 0:
+            urls = list(self.video_data.values())
+            song = urls[user_choice-1]
+            return song
+        else:
+            await ctx.bot.say("That isn't in the video results!")
+            return None
+
     async def _enqueue_song(self, ctx, song: 'url', state, opts: 'json'):
         '''
         Enqueues a new music player into the queue of
@@ -144,45 +173,33 @@ class VoiceCommands:
     @commands.command(pass_context=True, no_pm=True)
     async def play(self, ctx, *args):
 
-        # Setup
-        server = ctx.message.server
+        # voice channel
         channel = ctx.message.author.voice.voice_channel
+
+        # current voice state
         state = self._get_voice_state(ctx.message.server)
+
+        # parse user input
+        # if index error, the command_error
+        # function in script.py should
+        # cover this, giving the user
+        # the help page
         song = args[0]
+
+        # options for youtube downloading
         opts = youtube.opts
 
         # Join Voice Channel
         if state.voice == None:
             state.voice = await self._join_voice(ctx, channel)
 
-        if youtube.is_youtube_url(song):
-            opts = {
-                'default_search': 'auto',
-                'quiet': True,
-            }
 
-        else:
-
-            # If the user input is not a youtube URL, 
-            # check if the input is an int and check if
-            # it is a valid one.
-            try:
-                user_choice = int(args[0])
-            except ValueError:
-                await ctx.bot.say("Please use the search command to search for a song,")
-                return await ctx.bot.say("and then choose a song from the search results")
-
-            # check if the user actually made a search
-            if self.current_search == "" or self.current_search == None: 
-                return await ctx.bot.say("You didn't specify a search")
-
-            # Only allowing 10 results for now, so user input
-            # needs to be within 1-10
-            if user_choice <= 10 and user_choice > 0:
-                urls = list(self.video_data.values())
-                song = urls[user_choice-1]
-            else:
-                return await ctx.bot.say("That isn't in the video results!")
+        # If the user input is not a youtube URL, 
+        # check if the input valid 
+        if not youtube.is_youtube_url(song):
+            song = await self._get_song_choice(ctx, args)
+            if song == None:
+                return
 
         await self._enqueue_song(ctx, song, state, opts)
 
