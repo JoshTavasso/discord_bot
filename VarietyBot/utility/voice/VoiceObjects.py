@@ -54,6 +54,14 @@ class VoiceState:
         # Asyncio event that deals with playing next song
         self.play_next_song = asyncio.Event()
 
+        # the current search that was made
+        self.current_search = None
+
+        # a dictionary of youtube search results
+        # where the key represents a video title
+        # and the value represents the video url
+        self.video_data = None
+
         # Queue of VoiceEntries
         self.songs = asyncio.Queue()
 

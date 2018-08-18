@@ -27,9 +27,9 @@ class VoiceCommands:
 
     def __init__(self, bot):
         self.bot = bot
-        self.voice_states = {}
-        self.current_search = None
-        self.video_data = None
+
+        # dict of voice states for hosting bot on multiple servers
+        self.voice_states = {} 
 
     #### HELPER FUNCTIONS ####
 
@@ -77,34 +77,59 @@ class VoiceCommands:
         await ctx.bot.say("Joining Your Voice Channel")
         return voice
 
+    async def _song_error_msg(self, ctx, error: str) -> None:
+        '''
+        This function is called if the user input for
+        playing a song is invalid
+
+        Bot sends the user error messages depending on
+        what type of error was made
+
+        Returns None to represent that the user's input
+        was invalid
+        '''
+        if error == 'ValueError':
+            await ctx.bot.say("Please use the search command to search for a song,")
+            await ctx.bot.say("and then choose a song from the search results")
+            await ctx.bot.say("Or, alternatively, you can give me a youtube url and I can play it for you")
+
+        elif error == 'NoSearch':
+        	await ctx.bot.say("You didn't specify a search")
+
+        elif error == 'NotInResults':
+        	await ctx.bot.say("That isn't in the video results!")
+
+        return None
+
     async def _get_song_choice(self, ctx, args) -> 'url or None':
         '''
         checks user input and returns
+        either a song url or None, 
         depending on whether the user
         input is valid or not
         '''
+
+        # current voice state
+        state = self._get_voice_state(ctx.message.server)
+
         # check if user input is a number
         try:
             user_choice = int(args[0])
         except ValueError:
-            await ctx.bot.say("Please use the search command to search for a song,")
-            await ctx.bot.say("and then choose a song from the search results")
-            return None
+            return await self._song_error_msg(ctx, 'ValueError')
 
         # check if the user actually made a search
-        if self.current_search == "" or self.current_search == None: 
-            await ctx.bot.say("You didn't specify a search")
-            return None
+        if state.current_search == "" or state.current_search == None: 
+        	return await self._song_error_msg(ctx, 'NoSearch')
 
         # Only allowing 10 results for now, so user input
         # needs to be within 1-10
         if user_choice <= 10 and user_choice > 0:
-            urls = list(self.video_data.values())
+            urls = list(state.video_data.values())
             song = urls[user_choice-1]
             return song
         else:
-            await ctx.bot.say("That isn't in the video results!")
-            return None
+        	return await self._song_error_msg(ctx, 'NotInResults')
 
     async def _enqueue_song(self, ctx, song: 'url', state, opts: 'json'):
         '''
@@ -149,14 +174,17 @@ class VoiceCommands:
         results
         '''
 
-        self.current_search = ' '.join(args)
+        # current voice state
+        state = self._get_voice_state(ctx.message.server)
 
-        if self.current_search == '': 
+        state.current_search = ' '.join(args)
+
+        if state.current_search == '': 
             await ctx.bot.say("You didn't specify a search")
         else:
             await ctx.bot.say("Searching...")
-            self.video_data = youtube.front_page_info(self.current_search)
-            await self._display_results(ctx, self.video_data)
+            state.video_data = youtube.front_page_info(state.current_search)
+            await self._display_results(ctx, state.video_data)
 
     @commands.command(pass_context = True)
     async def results(self, ctx):
@@ -165,10 +193,13 @@ class VoiceCommands:
         from the latest search 
         '''
 
-        if self.video_data == None: 
+        # current voice state
+        state = self._get_voice_state(ctx.message.server)
+
+        if state.video_data == None: 
             return await ctx.bot.say("You never searched anything!")
 
-        await self._display_results(ctx, self.video_data)
+        await self._display_results(ctx, state.video_data)
 
     @commands.command(pass_context=True, no_pm=True)
     async def play(self, ctx, *args):
