@@ -58,7 +58,7 @@ async def on_ready():
     print(bot.user.id)
     print('------')
 
-    await send_welcome_msg(bot, list(bot.servers)[0])
+    #await send_welcome_msg(bot, list(bot.servers)[0])
 
 if __name__ == '__main__':
 	bot.run(token)

@@ -37,6 +37,19 @@ yt_url = 'https://www.youtube.com'
 
 #### FUNCTIONS ####
 
+def _check_url(url) -> bool:
+	'''
+	checks if the url contains a youtube video
+	and returns boolean based on that
+	
+	Covers cases in which URL leads to a youtube 
+	channel or playlist
+
+	will edit this later
+	'''
+
+	return True
+
 def front_page_info(user_input: 'str: search in YT search bar') -> {'Title: URL'}:
 	'''
 	generates a dictionary containing data based on the user input.
@@ -67,8 +80,8 @@ def front_page_info(user_input: 'str: search in YT search bar') -> {'Title: URL'
 		# make sure url is *just* a video, not a 
 		# playlist or channel
 		url = url.split('&')[0]
-		
-		videos[title] = url
+		if _check_url(url):
+			videos[title] = url
 	    
 	return videos
 
@@ -78,7 +91,7 @@ def is_youtube_url(url) -> bool:
 	youtube URL
 	'''
 
-	return True if yt_url in url else False
+	return True if (yt_url in url and _check_url(url) == True) else False
 
 def download_mp3(url: str) -> None:
 	'''

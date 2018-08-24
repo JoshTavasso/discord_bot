@@ -22,7 +22,7 @@ class VoiceEntry:
     '''
     A VoiceEntry represents a 'song' object
     '''
-    def __init__(self, message, pleayer):
+    def __init__(self, message, player):
         self.requester = message.author
         self.channel = message.channel
         self.player = player
