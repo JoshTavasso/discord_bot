@@ -21,6 +21,7 @@ from bs4 import BeautifulSoup
 # pip3 install youtube_dl
 import youtube_dl
 
+
 #### CONSTANTS ####
 
 # youtube options when downloading a video
@@ -33,22 +34,11 @@ opts = dict(
     quiet=True,
     nocheckcertificate=True)
 
-yt_url = 'https://www.youtube.com'
+# All youtube URLs are in one of these two forms
+yt_urls = ['https://www.youtube.com', 'https://youtu.be/']
+
 
 #### FUNCTIONS ####
-
-def _check_url(url) -> bool:
-	'''
-	checks if the url contains a youtube video
-	and returns boolean based on that
-	
-	Covers cases in which URL leads to a youtube 
-	channel or playlist
-
-	will edit this later
-	'''
-
-	return True
 
 def front_page_info(user_input: 'str: search in YT search bar') -> {'Title: URL'}:
 	'''
@@ -80,18 +70,22 @@ def front_page_info(user_input: 'str: search in YT search bar') -> {'Title: URL'
 		# make sure url is *just* a video, not a 
 		# playlist or channel
 		url = url.split('&')[0]
-		if _check_url(url):
+		if 'user' not in url:
 			videos[title] = url
 	    
 	return videos
 
-def is_youtube_url(url) -> bool:
+def is_youtube_url(url: str) -> bool:
 	'''
 	returns True if the URL given is a 
 	youtube URL
 	'''
 
-	return True if (yt_url in url and _check_url(url) == True) else False
+	for url_portion in yt_urls:
+		if url_portion in url:
+			return True
+
+	return 'user' not in url
 
 def download_mp3(url: str) -> None:
 	'''
@@ -100,6 +94,7 @@ def download_mp3(url: str) -> None:
 	as an mp3 into the directory that 
 	this file is in
 	'''
+	
 	ydl_opts = {
     'format': 'bestaudio/best',
     'postprocessors': [{'key': 'FFmpegExtractAudio',
