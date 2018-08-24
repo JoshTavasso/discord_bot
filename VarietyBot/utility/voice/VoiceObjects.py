@@ -8,7 +8,7 @@ found @ https://github.com/Rapptz/discord.py/blob/master/examples/playlist.py
 
 '''
 
-# module for Asynchronous funtions
+# module for Asynchronous functions
 import asyncio
 
 # discord.py module
@@ -22,7 +22,7 @@ class VoiceEntry:
     '''
     A VoiceEntry represents a 'song' object
     '''
-    def __init__(self, message, player):
+    def __init__(self, message, pleayer):
         self.requester = message.author
         self.channel = message.channel
         self.player = player

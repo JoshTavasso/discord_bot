@@ -12,7 +12,9 @@ for commands
 
 This is the general format:
 '''
-class test:
+
+
+class Test:
     def __init__(self, bot):
         self.bot = bot
 
@@ -24,5 +26,6 @@ class test:
     async def sup(self, ctx):
         await self.bot.say('sup')
 
+
 def setup(bot):
-    bot.add_cog(test(bot))
+    bot.add_cog(Test(bot))
