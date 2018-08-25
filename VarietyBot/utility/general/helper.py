@@ -13,12 +13,33 @@ async def send_welcome_msg(bot, server):
             return await bot.send_message(
                 channel, "Hello There! Use {}help to see what I do!".format(bot.command_prefix))
 
+def reminder_help(prefix):
+    _reminder_message = f"""
+Reminder (To-Do list) Commands:
+
+{prefix}note <list entry> ->
+    entry that you would like 
+    to add to your list
+
+{prefix}todo
+    displays your to-do list
+
+{prefix}erase <entry to erase>
+    allows you to remove entries
+    from your list
+    if you specify 'all' as your entry,
+    your entire list is emptied
+    
+"""
+    
+    return "```" + _reminder_message + "```"
+    
 def emoji_help(prefix):
     _emoji_message = f"""
 
 Emoji Commands:
 
-{prefix}emoji <emoji name>
+{prefix}emoji <emoji name> ->
     creates an emoji, given an 
     image in jpg or png format
 
@@ -30,7 +51,7 @@ Emoji Commands:
         -> In the description of the image,
             user inputs: {prefix}emoji pikachu
 
-{prefix}remove <emoji name>
+{prefix}remove <emoji name> ->
     removes the emoji
 """
 
@@ -103,6 +124,10 @@ A Multi Purpose Bot
 
 {prefix}help emoji ->
     Shows Emoji related commands
+
+{prefix}help reminder ->
+    Shows reminder (to-do list) related
+    commands
 
 {prefix}help ->
     This message.

@@ -44,8 +44,7 @@ async def on_command_error(error, ctx):
     await bot.send_message(ctx.message.channel, 
         "An error occured, maybe you inputted a wrong command.")
     await bot.send_message(ctx.message.channel, 
-        "Here is the Help Page:\n{}".format(
-            help_page(ctx.bot.command_prefix)))
+        f"Use {ctx.bot.command_prefix}help if you need assistance")
 
 @bot.event
 async def on_ready():

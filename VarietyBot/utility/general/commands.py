@@ -12,7 +12,7 @@ from discord.ext import commands
 from utility.general.data import life_time
 
 # helper functions
-from utility.general.helper import help_page, emoji_help, music_help
+from utility.general.helper import help_page, emoji_help, music_help, reminder_help
 
 class General:
     def __init__(self, bot):
@@ -34,6 +34,12 @@ class General:
 
         elif args[0] == 'emoji':
             await ctx.bot.say(emoji_help(prefix))
+
+        elif args[0] == 'reminder':
+            await ctx.bot.say(reminder_help(prefix))
+
+        else:
+            await ctx.bot.say(help_page(prefix))
 
     @commands.command(pass_context = True)
     async def prefix(self, ctx, *args):
