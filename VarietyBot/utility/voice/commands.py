@@ -124,7 +124,7 @@ class VoiceCommands:
 
         # Only allowing 10 results for now, so user input
         # needs to be within 1-10
-        if user_choice <= 10 and user_choice > 0:
+        if user_choice < 11 and user_choice > 0:
             urls = list(state.video_data.values())
             song = urls[user_choice-1]
             return song
@@ -231,7 +231,6 @@ class VoiceCommands:
             song = await self._get_song_choice(ctx, args)
             if song == None:
                 return
-
         await self._enqueue_song(ctx, song, state, opts)
 
     @commands.command(pass_context=True, no_pm=True)

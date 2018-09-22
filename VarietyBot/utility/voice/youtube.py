@@ -82,10 +82,10 @@ def is_youtube_url(url: str) -> bool:
 	'''
 
 	for url_portion in yt_urls:
-		if url_portion in url:
+		if (url_portion in url and 'user' not in url):
 			return True
 
-	return 'user' not in url
+	return False
 
 def download_mp3(url: str) -> None:
 	'''
