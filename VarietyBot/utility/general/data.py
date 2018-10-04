@@ -5,7 +5,7 @@ Some data needed for the bot
 
 '''
 
-token = 'insert token here'
+token = ''
 
 # message life time
 life_time = 10

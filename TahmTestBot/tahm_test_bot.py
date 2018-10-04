@@ -3,7 +3,7 @@ import random
 from discord.ext import commands
 
 BOT_PREFIX = '&'
-TOKEN = "NDcxNzkxNDgxNTMxNjYyMzM3.Dj589w.JT1galpWvN67pex0iOldHdcUhps"
+TOKEN = ''
 
 # Reminders (for now) are set in a dictionary using the author of the command as a key,
 # with a list of strings as the value
